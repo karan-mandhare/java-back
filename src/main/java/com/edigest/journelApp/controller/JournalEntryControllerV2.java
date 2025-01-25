@@ -55,7 +55,7 @@ public class JournalEntryControllerV2 {
 		if(data != null) {
 			data.setContent(myEntry.getContent() != null && !myEntry.getContent().equals("") ? myEntry.getContent() : data.getContent());
 			data.setTitle(myEntry.getTitle() != null && !myEntry.getTitle().equals("") ? myEntry.getTitle() : data.getTitle());
-		}
+		} 
 		
 		myEntry.setDate(LocalDateTime.now());
 		 
