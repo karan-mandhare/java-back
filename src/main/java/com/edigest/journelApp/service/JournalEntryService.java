@@ -1,5 +1,6 @@
 package com.edigest.journelApp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.edigest.journelApp.entity.JournalEntry;
+import com.edigest.journelApp.entity.User;
 import com.edigest.journelApp.respository.JournalEntryRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class JournalEntryService {
@@ -16,24 +19,36 @@ public class JournalEntryService {
 	@Autowired
 	private JournalEntryRepository journalEntryRepository;
 	
-	public void saveEntry(JournalEntry journalEntry) {		
-		journalEntryRepository.save(journalEntry);
+	@Autowired
+	private UserService userService;
+
+	@Transactional
+	public void saveEntry(JournalEntry journalEntry, String username) {
+		User user = userService.findByUsername(username);
+		journalEntry.setDate(LocalDateTime.now());
+		JournalEntry saved = journalEntryRepository.save(journalEntry);
+		user.getJournalEntries().add(saved);
+		userService.saveEntry(user);
 	}
 	
 	public List<JournalEntry> getEntries(){
 		return journalEntryRepository.findAll();
 	}
 	
-	public JournalEntry getById(ObjectId id) {
-		return journalEntryRepository.findById(id).orElse(null);
+	public Optional<JournalEntry> getById(ObjectId id) {
+		return journalEntryRepository.findById(id);
 	}
 	
-	public String deleteById(ObjectId id) {
-		journalEntryRepository.deleteById(id);
-		return "deleted successfully";
+	public void deleteById(ObjectId id, String username) {
+		User user = userService.findByUsername(username);
+		user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+		userService.saveEntry(user);
+		journalEntryRepository.deleteById(id);	
 	}
 	
-	public JournalEntry updateById(JournalEntry myEntry) {
-		return journalEntryRepository.save(myEntry);
+	public Optional<JournalEntry> updateById(JournalEntry myEntry) {
+		 return Optional.ofNullable(journalEntryRepository.save(myEntry));
 	}
+
+	
 }
