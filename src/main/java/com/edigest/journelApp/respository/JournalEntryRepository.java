@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JournalEntryRepository extends MongoRepository<JournalEntry, ObjectId> {
 
-	Optional<JournalEntry> save(Optional<JournalEntry> myEntry);
+	JournalEntry save(JournalEntry myEntry);
 
 }

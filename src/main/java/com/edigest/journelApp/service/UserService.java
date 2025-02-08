@@ -1,6 +1,5 @@
 package com.edigest.journelApp.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class UserService {
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	
-	public boolean saveEntry(User user) {
+	public boolean saveNewUser(User user) {
 		try {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setRoles(Arrays.asList("USER"));
@@ -35,7 +34,7 @@ public class UserService {
 		}
 	}
 
-	public boolean saveUserEntry(User user) {
+	public boolean saveUser(User user) {
 		try {
 			userRepository.save(user);
 			return true;
@@ -53,7 +52,7 @@ public class UserService {
 	}
 	
 //	public UserRepository deleteById(ObjectId id) {
-//		return userRepository.deleteById(id);
+////		return userRepository.deleteById(id);
 //	}
 
 	public User findByUsername(String username) {
