@@ -62,5 +62,5 @@ public class UserController {
 		userRepository.deleteByUsername(authUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+	// hello
 }
